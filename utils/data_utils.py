@@ -11,7 +11,7 @@ import numpy as np
 import os
 from scipy.ndimage import zoom
 import random
-import trajectory_viewer as tv
+from utils import trajectory_viewer as tv
 import time
 
 raw_table_name = 'bounding_boxes'
@@ -81,7 +81,8 @@ def make_dir_if_new(filename):
         os.makedirs(directory)
 
 
-def _rearrange_data(object_id, object_label, x, y, v_x, v_y, generate_graph, trajectory_image):
+# TODO Removed trajectory image generation because it wasn't working
+def _rearrange_data(object_id, object_label, x, y, v_x, v_y):
     """
     Generates an array formed by the input data in the following format:
     [[Object_id, x_0, y_0, v_x_0, v_y_0, x_1, y_1, v_x_1, v_y_1, ..., x_15, y_15, v_x_15, v_y_15]
@@ -97,7 +98,7 @@ def _rearrange_data(object_id, object_label, x, y, v_x, v_y, generate_graph, tra
     expected_input_size = sub_trajectory_size + int(np.ceil(float(x.shape[0] - sub_trajectory_size) /
                                                             trajectory_stride)) * trajectory_stride
 
-    rows_number = (expected_input_size - sub_trajectory_size) / trajectory_stride + 1
+    rows_number = int((expected_input_size - sub_trajectory_size) / trajectory_stride + 1)
 
     if expected_input_size > x.shape[0]:
         # Resize all the input array to the expected size
@@ -110,12 +111,12 @@ def _rearrange_data(object_id, object_label, x, y, v_x, v_y, generate_graph, tra
     array_data = np.full((rows_number, 1), object_id)
     array_data = np.hstack((array_data, np.full((rows_number, 1), object_label)))
 
-    if generate_graph:
-        for i in range(x.shape[0] / sub_trajectory_size):
-            trajectory_image.add_trajectory(x[i * sub_trajectory_size:(i + 1) * sub_trajectory_size].flatten(),
-                                            y[i * sub_trajectory_size:(i + 1) * sub_trajectory_size].flatten(),
-                                            line_width=object_label + 1,
-                                            line_color=['red', 'limegreen', 'c'][object_label])
+    # if generate_graph:
+    #     for i in range(x.shape[0] / sub_trajectory_size):
+    #         trajectory_image.add_trajectory(x[i * sub_trajectory_size:(i + 1) * sub_trajectory_size].flatten(),
+    #                                         y[i * sub_trajectory_size:(i + 1) * sub_trajectory_size].flatten(),
+    #                                         line_width=object_label + 1,
+    #                                         line_color=['red', 'limegreen', 'c'][object_label])
 
     for i in range(sub_trajectory_size):
         array_data = np.hstack((array_data,
@@ -147,7 +148,7 @@ def extract_and_put_transformed_data(raw_input_file_all,
     print("Exporting them to CSV files.")
 
     # Trajectory image viewer
-    trajectory_image = tv.ImageViewer(input_raw_image_frame_path)
+    # trajectory_image = tv.ImageViewer(input_raw_image_frame_path)
 
     # Format of the data: [Object_id, Object_label x_0, y_0, v_x_0, v_y_0, x_1, y_1, v_x_1, v_y_1, x_2, y_2, ...]
 
@@ -210,9 +211,7 @@ def extract_and_put_transformed_data(raw_input_file_all,
             v_x = np.array(v_x).reshape(-1, 1)
             v_y = np.array(v_y).reshape(-1, 1)
 
-            array_dataset = _rearrange_data(object_id, object_label, x_1, y_1, v_x, v_y,
-                                            generate_graph=generate_graph,
-                                            trajectory_image=trajectory_image)
+            array_dataset = _rearrange_data(object_id, object_label, x_1, y_1, v_x, v_y,)
 
             open_file_mode = 'wb' if first_call else 'ab'
 
@@ -224,14 +223,14 @@ def extract_and_put_transformed_data(raw_input_file_all,
         object_label += 1
 
     # Save and Show the trajectory image
-    if generate_graph:
-        trajectory_name = '_real_abnormal_trajectories'
-        trajectory_image_name = directory + '/' + \
-                                raw_input_file_all[raw_input_file_all.rfind('/') + 1:raw_input_file_all.rfind('.')] + \
-                                trajectory_name + '.pdf'
-        trajectory_image.save_image(os.path.join(dir_name, trajectory_image_name))
-    if generate_graph and show_graph:
-        trajectory_image.show_image()
+    # if generate_graph:
+    #     trajectory_name = '_real_abnormal_trajectories'
+    #     trajectory_image_name = directory + '/' + \
+    #                             raw_input_file_all[raw_input_file_all.rfind('/') + 1:raw_input_file_all.rfind('.')] + \
+    #                             trajectory_name + '.pdf'
+    #     trajectory_image.save_image(os.path.join(dir_name, trajectory_image_name))
+    # if generate_graph and show_graph:
+    #     trajectory_image.show_image()
 
     # Print finishing message
     print("                                          ---> Done!")
@@ -254,15 +253,15 @@ def extract_augment_and_export_data(raw_input_file_all,
     print("Exporting them to CSV file.")
 
     # Trajectory image viewer
-    trajectory_image = tv.ImageViewer(input_raw_image_frame_path)
+    # trajectory_image = tv.ImageViewer(input_raw_image_frame_path)
 
     # Format of the data: [Object_id, Object_label x_0, y_0, v_x_0, v_y_0, x_1, y_1, v_x_1, v_y_1, x_2, y_2, ...]
 
     # Extract trajectories and export to CSV file
-    dataset_file_name = 'data/augmented/' + raw_input_file_all[raw_input_file_all.rfind('/') + 1:raw_input_file_all.rfind('.')] \
-                        + '_data.csv'
+    dataset_name = raw_input_file_all[raw_input_file_all.rfind('/') + 1:raw_input_file_all.rfind('_')]
+    dataset_file_name = 'data/' + dataset_name + '/augmented/' + dataset_name + '_data.csv'
 
-    directory = os.path.join(dir_name, dataset_file_name[:dataset_file_name.rfind('/')])
+    directory = os.path.join(os.getcwd(), dataset_file_name[:dataset_file_name.rfind('/')])
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -317,9 +316,7 @@ def extract_augment_and_export_data(raw_input_file_all,
             v_x = np.array(v_x).reshape(-1, 1)
             v_y = np.array(v_y).reshape(-1, 1)
 
-            array_dataset = _rearrange_data(object_id, object_label, x_1, y_1, v_x, v_y,
-                                            generate_graph=generate_graph,
-                                            trajectory_image=trajectory_image)
+            array_dataset = _rearrange_data(object_id, object_label, x_1, y_1, v_x, v_y,)
 
             open_file_mode = 'wb' if first_call else 'ab'
 
@@ -351,9 +348,7 @@ def extract_augment_and_export_data(raw_input_file_all,
 
                 augmented_object_id = int(str(augmented_object_id_code) + str(object_id) + str(i))
 
-                array_dataset = _rearrange_data(augmented_object_id, object_label, x_a_1, y_a_1, v_x_a, v_y_a,
-                                                generate_graph=False,
-                                                trajectory_image=trajectory_image)
+                array_dataset = _rearrange_data(augmented_object_id, object_label, x_a_1, y_a_1, v_x_a, v_y_a,)
 
                 with open(os.path.join(dir_name, dataset_file_name), 'ab') as datafile:
                     np.savetxt(datafile, array_dataset, fmt="%.2f", delimiter=",")
@@ -361,13 +356,13 @@ def extract_augment_and_export_data(raw_input_file_all,
         object_label += 1
 
     # Save and Show the trajectory image
-    if generate_graph:
-        trajectory_image_name = directory + '/' + \
-                                raw_input_file_all[raw_input_file_all.rfind('/') + 1:raw_input_file_all.rfind('.')] + \
-                                '_normal_trajectories.pdf'
-        trajectory_image.save_image(os.path.join(dir_name, trajectory_image_name))
-    if generate_graph and show_graph:
-        trajectory_image.show_image()
+    # if generate_graph:
+    #     trajectory_image_name = directory + '/' + \
+    #                             raw_input_file_all[raw_input_file_all.rfind('/') + 1:raw_input_file_all.rfind('.')] + \
+    #                             '_normal_trajectories.pdf'
+    #     trajectory_image.save_image(os.path.join(dir_name, trajectory_image_name))
+    # if generate_graph and show_graph:
+    #     trajectory_image.show_image()
 
     # Print finishing message
     print("                                               ---> Done!")

@@ -1,0 +1,9 @@
+# TODO
+# Create a class that takes as input raw data files/file locations and creates all the augmented and abnormal data
+# necessary as class arguments
+
+# TODO
+# Fix image creation and display
+
+# TODO
+# We are not training on the real_abnormal data, what happens if we start doing that?

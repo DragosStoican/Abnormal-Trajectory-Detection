@@ -41,14 +41,14 @@ def make_image_transparent(image):
     return image2
 
 def generate_background_image(input_raw_image_frame_path):
-    image_name_1 = input_raw_image_frame_path + str(1).zfill(8) + '.jpg'
+    image_name_1 = input_raw_image_frame_path + str(1).zfill(8) + '.png'
     im1 = Image.open(image_name_1)
     im1 = make_image_transparent(im1)
 
     alpha_value = 1.0 / number_of_images
 
     for i in range(number_of_images):
-        image_name_2 = input_raw_image_frame_path + str(i+1).zfill(8) + '.jpg'
+        image_name_2 = input_raw_image_frame_path + str(i+1).zfill(8) + '.png'
         im2 = Image.open(image_name_2)
         im2 = make_image_transparent(im2)
         im1 = Image.blend(im1,im2,alpha_value)
