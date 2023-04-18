@@ -4,4 +4,4 @@ Make new dataset and test both methods
 Make an automation that picks the best method(?)
 Write up results
 Rewrite background lit
-Remake the images showing trajectories(?)
+Remake the images showing trajectories(?) DONE!
