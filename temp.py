@@ -32,7 +32,7 @@ for j in range(0, len(arr), 2):
 #         if j % 2 == 0:
 #             normal_data[i, j] = (450 - normal_data[i, j]) % 450
 #
-# np.savetxt('test.csv', normal_data, delimiter=',')
+# np.savetxt('york_gt_data.csv', normal_data, delimiter=',')
 
 # %%
 normal_data, abnormal_data, real_abnormal_data, real_abnormal_data_2 = get_data('york', scale=False)

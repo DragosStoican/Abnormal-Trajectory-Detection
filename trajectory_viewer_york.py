@@ -17,6 +17,7 @@ def show_trajectories(image, trajectories, color):
         print(f"Plotting trajectory {i + 1}/{len(trajectories)}")
         trajectory_data = trajectory[1:]  # Remove category
         category = int(trajectory[0])
+        print(category)
         x_positions = trajectory_data[0::2]
         y_positions = trajectory_data[1::2]
 
