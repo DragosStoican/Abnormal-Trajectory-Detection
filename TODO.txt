@@ -1,7 +1,26 @@
 # TODO
-Write up new methodology with LSTM
-Make new dataset and test both methods
-Make an automation that picks the best method(?)
-Write up results
-Rewrite background lit
+Write up new methodology with LSTM DONE!
+Make new dataset and test both methods DONE!
+Change images in dataset section with the ones you generated DONE!
+Write up results DONEish!
+In results section, show which trajectories weren't correctly labeled. As in show an image of them
+Rewrite background lit DONE!
 Remake the images showing trajectories(?) DONE!
+Present york dataset in results section DONEish!
+In results discuss the pros and cons of each approach
+bibliography
+Add all plots to appendix
+Add code blocks to appendix
+
+
+# Questions
+Contents of xecutive summary
+Does the bibliography go in the 30 page limit?
+Where do I mention what I used for coding? executive summary, appendices or main body?
+I have some references to websites I used for information (Like why use normalization or k-fold), are these valuable?
+The introduction to autoencoders and LSTM, are those meant to be in the methodology?
+I want to make some referencing to the code. Like "This was done in xxx.py or yyy.py"
+
+Do I have to date every bibliography entry?
+Link in bibliography?
+Check bibliography standards

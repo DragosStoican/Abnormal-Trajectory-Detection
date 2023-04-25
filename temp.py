@@ -22,8 +22,8 @@ arr = np.genfromtxt('data/york/traj.csv', delimiter=',')
 np.savetxt('test.csv', arr)
 
 # %%
-for j in range(0, len(arr), 2):
-    arr[j] = (450 - arr[j]) % 450
+# for j in range(0, len(arr), 2):
+#     arr[j] = (450 - arr[j]) % 450
 # %%
 # normal_data, abnormal_data, real_abnormal_data, real_abnormal_data_2 = get_data('york', scale=False)
 #
@@ -35,9 +35,7 @@ for j in range(0, len(arr), 2):
 # np.savetxt('york_gt_data.csv', normal_data, delimiter=',')
 
 # %%
-normal_data, abnormal_data, real_abnormal_data, real_abnormal_data_2 = get_data('york', scale=False)
-
-arr = normal_data
+arr = np.genfromtxt('test.csv', delimiter=',')
 
 arr = np.flip(arr, axis=1)
 
@@ -49,6 +47,6 @@ for i, a in enumerate(arr):
     tmp = tmp.flatten()
     arr[i] = tmp
 
-np.savetxt('test.csv', arr, delimiter=',')
+np.savetxt('test2.csv', arr, delimiter=',')
 
 

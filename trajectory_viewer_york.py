@@ -17,14 +17,14 @@ def show_trajectories(image, trajectories, color):
         print(f"Plotting trajectory {i + 1}/{len(trajectories)}")
         trajectory_data = trajectory[1:]  # Remove category
         category = int(trajectory[0])
-        print(category)
         x_positions = trajectory_data[0::2]
         y_positions = trajectory_data[1::2]
 
-        ax.plot(x_positions, y_positions, '-', linewidth=1, color=color[category])
+        linewidth = 1
+        ax.plot(x_positions, y_positions, '-', linewidth=linewidth, color=color[category])
         ax.arrow(x_positions[-2], y_positions[-2],
                  x_positions[-1] - x_positions[-2], y_positions[-1] - y_positions[-2],
-                 head_width=20, head_length=10, fc=color[category], ec=color[category])
+                 head_width=20*linewidth, head_length=10*linewidth, fc=color[category], ec=color[category])
 
     plt.show()
 
@@ -34,13 +34,18 @@ def show_trajectories(image, trajectories, color):
 # %%
 dataset = 'york'
 image = 'data/images/' + dataset + '.png'
-normal_data, abnormal_data, real_abnormal_data, real_abnormal_data_2 = get_data(dataset, scale=False)
+normal_data_file = f"./data/{dataset}/{dataset}_gt_data_original.csv"
+normal_data = np.genfromtxt(normal_data_file, delimiter=',')
+# Remove the first column, which is the object_id
+normal_data = normal_data[:, 1:]
+print(f"Normal data shape: {normal_data.shape}")
 
-# %%
-# for i in range(len(normal_data)):
-#     for j in range(2, len(normal_data[i][1:])+1, 2):
-#         if j % 2 == 0:
-#             normal_data[i, j] = (450 - normal_data[i, j]) % 450
+# Create the generated abnormal dataset
+abnormal_data_file = f"./data/{dataset}/{dataset}_gt_abnormal_original.csv"
+abnormal_data = np.genfromtxt(abnormal_data_file, delimiter=',')
+# Remove the first column, which is the object_id
+abnormal_data = abnormal_data[:, 1:]
+print(f"Abnormal data shape: {abnormal_data.shape}")
 
 # %%
 show_trajectories(image, normal_data, ['green', 'blue', 'yellow'])
