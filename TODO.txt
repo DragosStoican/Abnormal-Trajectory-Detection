@@ -12,6 +12,11 @@ bibliography
 Add all plots to appendix
 Add code blocks to appendix
 
+Change the results to talk about normal accuracy and abnormal accuracy Done!
+Mentio DAE_method.py and LSTM_method.py in report Done!
+Results with and without clustering Done!
+Table at the end with both results
+
 
 # Questions
 Contents of xecutive summary
