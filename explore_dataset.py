@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from data_processing import get_data
 
 
 # Plot the data shape in a barplot

@@ -6,7 +6,7 @@ import numpy as np
 
 
 # %%
-def show_trajectories(image, trajectories, color, n):
+def show_trajectories(image, trajectories, color):
     fig = plt.figure()
     ax = plt.axes()
 
@@ -22,10 +22,9 @@ def show_trajectories(image, trajectories, color, n):
         y_positions = trajectory_data[1::4]
 
         ax.plot(x_positions, y_positions, '-', linewidth=1, color=color[category])
-        # if i == n-1:
         ax.arrow(x_positions[-2], y_positions[-2],
                  x_positions[-1] - x_positions[-2], y_positions[-1] - y_positions[-2],
-                 head_width=10, head_length=1, fc="Black", ec="Black", zorder=20)
+                 head_width=20, head_length=10, fc=color[category], ec=color[category])
 
     red_patch = mpatches.Patch(color='red', label='Pedestrian')
     green_patch = mpatches.Patch(color='green', label='Vehicle')
@@ -38,14 +37,13 @@ def show_trajectories(image, trajectories, color, n):
 
 
 # %%
-dataset = 'sherbrooke'
+dataset = 'york'
 image = 'data/images/' + dataset + '.png'
 normal_data, abnormal_data, real_abnormal_data, real_abnormal_data_2 = get_data(dataset, scale=False)
 
 
 # %%
-n = 55
-show_trajectories(image, normal_data[:n], ['red', 'green', 'blue'], n)
-# show_trajectories(image, abnormal_data, ['red', 'green', 'blue'])
-# show_trajectories(image, real_abnormal_data, ['red', 'green', 'blue'])
-# show_trajectories(image, real_abnormal_data_2, ['red', 'green', 'blue'])
+show_trajectories(image, normal_data, ['red', 'green', 'blue'])
+show_trajectories(image, abnormal_data, ['red', 'green', 'blue'])
+show_trajectories(image, real_abnormal_data, ['red', 'green', 'blue'])
+show_trajectories(image, real_abnormal_data_2, ['red', 'green', 'blue'])
